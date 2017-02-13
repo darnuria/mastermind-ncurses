@@ -4,12 +4,12 @@
 ;; ## Question 1 : tirage du code secre
 (defn code-secret
   [n]
-  (let [couleurs [:rouge :bleu :vert :jaune :noir :blanc]]
+  (let [couleurs [:red :blue :green :yellow :black :white]]
     (repeatedly n #(rand-nth couleurs))))
 
 
 (fact "Le `code-secret` est bien composé de couleurs."
-      (every? #{:rouge :bleu :vert :jaune :noir :blanc}
+      (every? #{:red :blue :green :yellow :black :white}
               (code-secret 4))
       => true)
 
@@ -37,26 +37,26 @@
 
 
 (fact "`indications` sont les bonnes."
-      (indications [:rouge]
-                   [:vert])
+      (indications [:red]
+                   [:green])
       => [:bad]
-      (indications [:rouge]
-                   [:rouge])
+      (indications [:red]
+                   [:red])
       => [:good]
-      (indications [:rouge :rouge]
-                   [:vert  :rouge])
+      (indications [:red :red]
+                   [:green  :red])
       => [:bad :good]
-      (indications [:rouge :rouge :vert :bleu]
-                   [:vert :rouge :bleu :jaune])
+      (indications [:red :red :green :blue]
+                   [:green :red :blue :yellow])
       => [:color :good :color :bad]
-      (indications [:rouge :rouge :vert :bleu]
-                   [:bleu :rouge :vert :jaune])
+      (indications [:red :red :green :blue]
+                   [:blue :red :green :yellow])
       => [:color :good :good :bad]
-      (indications [:rouge :rouge :vert :bleu]
-                   [:rouge :rouge :vert :bleu])
+      (indications [:red :red :green :blue]
+                   [:red :red :green :blue])
       => [:good :good :good :good]
-      (indications [:rouge :rouge :vert :vert]
-                   [:vert :bleu :rouge :jaune])
+      (indications [:red :red :green :green]
+                   [:green :blue :red :yellow])
       => [:color :bad :color :bad])
 
 ;; ## Question 3 : fréquences
@@ -67,10 +67,10 @@
 
 
 (fact "les `frequences` suivantes sont correctes."
-      (frequences [:rouge :rouge :vert :bleu :vert :rouge])
-      => (just {:rouge 3 :vert 2 :bleu 1})
-      (frequences [:rouge :vert :bleu])
-      => (just {:rouge 1 :vert 1 :bleu 1})
+      (frequences [:red :red :green :blue :green :red])
+      => (just {:red 3 :green 2 :blue 1})
+      (frequences [:red :green :blue])
+      => (just {:red 1 :green 1 :blue 1})
       (frequences [1 2 3 2 1 4])
       => (just {1 2, 2 2, 3 1, 4 1}))
 
@@ -85,9 +85,9 @@
      f-code (map vector code indication))))
 
 (fact "Les fréquences disponibles de `freqs-dispo` sont correctes."
-      (freqs-dispo [:rouge :rouge :bleu :vert :rouge]
+      (freqs-dispo [:red :red :blue :green :red]
                    [:good :color :bad :good :color])
-      => {:bleu 1, :rouge 2, :vert 0})
+      => {:blue 1, :red 2, :green 0})
 
 ;; ## Question 5 : filtrer par cadinalité (+ difficile)
 (defn filtre-indications
@@ -104,12 +104,12 @@
       [[] f-disp] (map vector trial indication)))))
 
 (fact "Le `filtre-indications` fonctionne bien."
-      (filtre-indications [:rouge :rouge :vert :bleu]
-                          [:vert :rouge :bleu :jaune]
+      (filtre-indications [:red :red :green :blue]
+                          [:green :red :blue :yellow]
                           [:color :good :color :bad])
       => [:color :good :color :bad]
-      (filtre-indications [:rouge :vert :rouge :bleu]
-                          [:rouge :rouge :bleu :rouge]
+      (filtre-indications [:red :green :red :blue]
+                          [:red :red :blue :red]
                           [:good :color :color :color])
       => [:good :color :color :bad])
 
