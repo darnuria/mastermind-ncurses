@@ -1,9 +1,7 @@
-;; # Exercice 6 : Mastermind
-
-(ns mastermind
+(ns mastermind.game
   (:use midje.sweet))
 
-;; ## Question 1 : tirage du code secret
+;; ## Question 1 : tirage du code secre
 (defn code-secret
   [n]
   (let [couleurs [:rouge :bleu :vert :jaune :noir :blanc]]
