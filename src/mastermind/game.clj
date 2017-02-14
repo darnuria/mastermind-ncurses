@@ -1,25 +1,27 @@
-(ns mastermind.game
-  (:use midje.sweet))
+(ns mastermind.game)
+
+;; Copyright © 2017, 2017 Axel Viala
+;;
+;; This file is part of MasterMind NCurses.
+;;
+;; MasterMind NCurses is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; MasterMind NCurses is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with MasterMind NCurses.  If not, see <http://www.gnu.org/licenses/>.
 
 ;; ## Question 1 : tirage du code secre
 (defn code-secret
   [n]
   (let [couleurs [:red :blue :green :yellow :black :white]]
     (repeatedly n #(rand-nth couleurs))))
-
-
-(fact "Le `code-secret` est bien composé de couleurs."
-      (every? #{:red :blue :green :yellow :black :white}
-              (code-secret 4))
-      => true)
-
-(fact "Le `code-secret` a l'air aléatoire."
-      (> (count (filter true? (map not=
-                                   (repeatedly 20 #(code-secret 4))
-                                   (repeatedly 20 #(code-secret 4)))))
-         0)
-      => true)
-
 
 ;; ## Question 2 : indications
 (defn indications
@@ -35,44 +37,12 @@
              :bad)))
        code trial))
 
-
-(fact "`indications` sont les bonnes."
-      (indications [:red]
-                   [:green])
-      => [:bad]
-      (indications [:red]
-                   [:red])
-      => [:good]
-      (indications [:red :red]
-                   [:green  :red])
-      => [:bad :good]
-      (indications [:red :red :green :blue]
-                   [:green :red :blue :yellow])
-      => [:color :good :color :bad]
-      (indications [:red :red :green :blue]
-                   [:blue :red :green :yellow])
-      => [:color :good :good :bad]
-      (indications [:red :red :green :blue]
-                   [:red :red :green :blue])
-      => [:good :good :good :good]
-      (indications [:red :red :green :green]
-                   [:green :blue :red :yellow])
-      => [:color :bad :color :bad])
-
 ;; ## Question 3 : fréquences
 (defn frequences
   [s]
-  (reduce (fn [freq e] (update freq e (fn [old] (if (some? old) (+ old 1) 1))))
+  (reduce (fn [freq e]
+            (update freq e (fn [old] (if (some? old) (+ old 1) 1))))
           {} s))
-
-
-(fact "les `frequences` suivantes sont correctes."
-      (frequences [:red :red :green :blue :green :red])
-      => (just {:red 3 :green 2 :blue 1})
-      (frequences [:red :green :blue])
-      => (just {:red 1 :green 1 :blue 1})
-      (frequences [1 2 3 2 1 4])
-      => (just {1 2, 2 2, 3 1, 4 1}))
 
 ;; ## Question 4 : fréquences disponibles
 (defn freqs-dispo
@@ -83,11 +53,6 @@
        (update acc c
                (fn [old] (if (= i :good) (dec old) old))))
      f-code (map vector code indication))))
-
-(fact "Les fréquences disponibles de `freqs-dispo` sont correctes."
-      (freqs-dispo [:red :red :blue :green :red]
-                   [:good :color :bad :good :color])
-      => {:blue 1, :red 2, :green 0})
 
 ;; ## Question 5 : filtrer par cadinalité (+ difficile)
 (defn filtre-indications
@@ -102,16 +67,6 @@
           :color (let [indic (if (>= (c f-corrected) 0) :color :bad)]
                    [(conj acc indic) (update f-corrected c dec)])))
       [[] f-disp] (map vector trial indication)))))
-
-(fact "Le `filtre-indications` fonctionne bien."
-      (filtre-indications [:red :red :green :blue]
-                          [:green :red :blue :yellow]
-                          [:color :good :color :bad])
-      => [:color :good :color :bad]
-      (filtre-indications [:red :green :red :blue]
-                          [:red :red :blue :red]
-                          [:good :color :color :color])
-      => [:good :color :color :bad])
 
 ;; ## Questions subsidiaire
 ;; Realiser un solveur.
