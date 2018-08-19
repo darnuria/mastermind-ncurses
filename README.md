@@ -5,7 +5,7 @@ Jeu en Ncurses devellopé pour le cours de
 
 Auteur Axel Viala
 
-Utilise la bibliotheque (clojure-lanterna)[https://multimud.github.io/clojure-lanterna/]
+Utilise la bibliotheque [clojure-lanterna](https://multimud.github.io/clojure-lanterna/)
 
 ## Usage
 
